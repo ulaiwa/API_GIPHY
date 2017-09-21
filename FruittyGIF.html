@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>fruitsfruitsfruitsfruits</title>
+</head>
+
+<body>
+	<h1>Pick a Fruit!!!!</h1>
+    <div id="all-fruit-display"></div> <br>
+    <form id="fruit-form">
+    	<label for="fruit-input"> ...or find your own fruit here</label>
+    	<input type="text" id="fruit-input">
+    	<input id="add-your-own-fruit" type="submit" value="add!">
+    </form>
+    
+     <div id="gifs-appear-here"></div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+
+  var fruitArray = [
+
+  	"Apples",
+	"Avocado",
+	"Bananas",
+	"Blueberries",
+	"Cucumbers",
+	"Grapes",
+	"Kiwis",
+	"Lemons",
+	"Mangos",
+	"Oranges",
+	"Peaches",
+	"Pears",
+	"Pineapple",
+	"Pomegranate",
+	"Strawberries",
+	"Tangerines",
+	"Tomatoes",
+	"Watermelons"
+	];
+
+	function renderBtn (){
+	$("#all-fruit-display").empty();
+
+		for (var i = 0; i < fruitArray.length; i++) {
+			//create button in html
+			var a = $("<button>");
+			//add a class to the button in html
+			a.addClass("fruit");
+			//add a data-attribute with a value of the fruitArray at index i
+			a.attr("data-object", fruitArray[i]);
+			//put the text on the buttons
+			a.text(fruitArray[i]);
+			$('#all-fruit-display').append(a);
+		}
+	}
+
+	$("#add-your-own-fruit").on("click", function(){
+		event.preventDefault();
+		//grab text from user in input box
+		var ownFruit = $("#fruit-input").val().trim();
+		//add the text to the fruitArray
+		fruitArray.push(ownFruit);
+		console.log("show fruit array when click submit");
+		console.log(fruitArray);
+		renderBtn();
+	});
+
+	renderBtn();
+
+	$("button").on("click", function(){
+		$("#gifs-appear-here").empty();
+
+		var fruit = $(this).attr("data-object");
+		// https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag= "
+		var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+		        fruit + "&api_key=dc6zaTOxFJmzC&limit=10";
+		console.log(fruit);
+
+		$.ajax({
+	          url: queryURL,
+	          method: "GET"
+	        })
+		.done(function(response) {
+	          var results = response.data;
+
+	          for (var i = 0; i < results.length; i++) {
+	            var gifDiv = $("<div class='item'>");
+
+	            var rating = results[i].rating;
+
+	            var p = $("<p>").text("Rating: " + rating);
+
+	            var fruitImage = $("<img>");
+	            fruitImage.attr("src", results[i].images.fixed_height.url);
+
+	            gifDiv.append(p);
+	            gifDiv.append(fruitImage);
+
+	            $("#gifs-appear-here").prepend(gifDiv);
+	          }
+	    });
+	});
+
+	
+
+  </script>
+
+</body>
+</html>
