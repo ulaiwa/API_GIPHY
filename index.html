@@ -70,15 +70,18 @@ h2   {
           for (var i = 0; i < results.length; i++) {
             var gifDiv = $("<div class='item'>");
 
-            var rating = results[i].rating;
+            
+            var still = results[i].images.fixed_height_still.url
+            var animate = results[i].images.fixed_height.url
 
+            var rating = results[i].rating;
             var p = $("<p>").text("Rating: " + rating);
+           
+            gifDiv.append(p);
+            gifDiv.append("<img src='" + still + "'>");
 
             var fruitImage = $("<img>");
-            fruitImage.attr("src", results[i].images.fixed_height.url);
-
-            gifDiv.append(p);
-            gifDiv.append(fruitImage);
+            fruitImage.addClass("fruit").attr("data-still", still).attr("data-animate", animate).attr("data-state", "still")
 
             $("#gifs-appear-here").prepend(gifDiv);
           }
