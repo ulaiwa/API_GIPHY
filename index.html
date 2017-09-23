@@ -4,10 +4,19 @@
 <head>
   <meta charset="utf-8">
   <title>fruitsfruitsfruitsfruits</title>
+
+<style>
+body {text-align: center;}
+h2   {
+	background-color: yellow;
+	color:red;}
+</style>
+
 </head>
 
 <body>
 	<h1>Pick a Fruit!!!!</h1>
+	<h2>WARNING: GIF might be irrelevant.</h2>
     <div id="all-fruit-display"></div> <br>
     <form id="fruit-form">
     	<label for="fruit-input"> ...or find your own fruit here</label>
@@ -43,36 +52,7 @@
 	"Watermelons"
 	];
 
-	function renderBtn (){
-	$("#all-fruit-display").empty();
-
-		for (var i = 0; i < fruitArray.length; i++) {
-			//create button in html
-			var a = $("<button>");
-			//add a class to the button in html
-			a.addClass("fruit");
-			//add a data-attribute with a value of the fruitArray at index i
-			a.attr("data-object", fruitArray[i]);
-			//put the text on the buttons
-			a.text(fruitArray[i]);
-			$('#all-fruit-display').append(a);
-		}
-	}
-
-	$("#add-your-own-fruit").on("click", function(){
-		event.preventDefault();
-		//grab text from user in input box
-		var ownFruit = $("#fruit-input").val().trim();
-		//add the text to the fruitArray
-		fruitArray.push(ownFruit);
-		console.log("show fruit array when click submit");
-		console.log(fruitArray);
-		renderBtn();
-	});
-
-	renderBtn();
-
-	$("button").on("click", function(){
+	function displayGif () {
 		$("#gifs-appear-here").empty();
 
 		var fruit = $(this).attr("data-object");
@@ -82,29 +62,63 @@
 		console.log(fruit);
 
 		$.ajax({
-	          url: queryURL,
-	          method: "GET"
-	        })
-		.done(function(response) {
-	          var results = response.data;
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+          var results = response.data;
 
-	          for (var i = 0; i < results.length; i++) {
-	            var gifDiv = $("<div class='item'>");
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
 
-	            var rating = results[i].rating;
+            var rating = results[i].rating;
 
-	            var p = $("<p>").text("Rating: " + rating);
+            var p = $("<p>").text("Rating: " + rating);
 
-	            var fruitImage = $("<img>");
-	            fruitImage.attr("src", results[i].images.fixed_height.url);
+            var fruitImage = $("<img>");
+            fruitImage.attr("src", results[i].images.fixed_height.url);
 
-	            gifDiv.append(p);
-	            gifDiv.append(fruitImage);
+            gifDiv.append(p);
+            gifDiv.append(fruitImage);
 
-	            $("#gifs-appear-here").prepend(gifDiv);
-	          }
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
 	    });
+	}
+
+	function renderBtn (){
+	$("#all-fruit-display").empty();
+
+	for (var i = 0; i < fruitArray.length; i++) {
+		//create button in html
+		var a = $("<button>");
+		//add a class to the button in html
+		a.addClass("fruit");
+		//add a data-attribute with a value of the fruitArray at index i
+		a.attr("data-object", fruitArray[i]);
+		//put the text on the buttons
+		a.text(fruitArray[i]);
+		$('#all-fruit-display').append(a);
+		}
+	}
+
+	$("#add-your-own-fruit").on("click", function(){
+		event.preventDefault();
+		//grab text from user in input box
+		var ownFruit = $("#fruit-input").val().trim();
+		//add the text to the fruitArray
+		fruitArray.push(ownFruit);
+
+		renderBtn();
+		console.log("show fruit array when click submit");
+		console.log(fruitArray);
 	});
+
+
+	$(document).on("click", ".fruit", displayGif);
+
+	renderBtn();
+
+
 
 	
 
