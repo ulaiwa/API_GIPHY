@@ -6,10 +6,15 @@
   <title>fruitsfruitsfruitsfruits</title>
 
 <style>
-body {text-align: center;}
+body {text-align: center;
+	background-color:black;
+	}
+
+h1, label, p {color:white;}
 h2   {
 	background-color: yellow;
 	color:red;}
+
 </style>
 
 </head>
@@ -70,18 +75,20 @@ h2   {
           for (var i = 0; i < results.length; i++) {
             var gifDiv = $("<div class='item'>");
 
-            
-            var still = results[i].images.fixed_height_still.url
-            var animate = results[i].images.fixed_height.url
-
             var rating = results[i].rating;
+
             var p = $("<p>").text("Rating: " + rating);
-           
-            gifDiv.append(p);
-            gifDiv.append("<img src='" + still + "'>");
 
             var fruitImage = $("<img>");
-            fruitImage.addClass("fruit").attr("data-still", still).attr("data-animate", animate).attr("data-state", "still")
+
+            fruitImage.attr("data-state", "still")
+            fruitImage.attr("src", results[i].images.fixed_height_still.url)
+            fruitImage.attr("data-still", results[i].images.fixed_height_still.url)
+            fruitImage.attr("data-animate", results[i].images.fixed_height.url)
+            fruitImage.attr("class", "gif")
+
+            gifDiv.append(p);
+            gifDiv.append(fruitImage);
 
             $("#gifs-appear-here").prepend(gifDiv);
           }
@@ -116,14 +123,23 @@ h2   {
 		console.log(fruitArray);
 	});
 
+	renderBtn();
 
 	$(document).on("click", ".fruit", displayGif);
 
-	renderBtn();
+	$("#gifs-appear-here").on("click", ".gif", function() {
+		console.log("state changed")
+      var state = $(this).attr("data-state");
+      if (state === "still") {
+        $(this).attr("src", $(this).data("animate"));
 
+        $(this).attr("data-state", "animate");
+      } else {
+        $(this).attr("src", $(this).data("still"));
 
-
-	
+        $(this).attr("data-state", "still");
+      }
+    });
 
   </script>
 
