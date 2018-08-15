@@ -5,7 +5,7 @@
 
 GIF rendering from GIPHY.com
 
-features:
+## Features:
 - AJAX call from GIPHY.com
 - search feature from GIPHY.com
 - state change (play | stop) when the image is clicked
